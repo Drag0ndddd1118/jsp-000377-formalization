@@ -14,40 +14,44 @@ More precisely, let $N(X, \delta)$ be the maximum cardinality of a finite subset
 
 ### Resolution
 
-Ronald Graham resolved this question affirmatively using an explicit parabola construction:
+Ronald Graham (1976) [Sa76, Ko01] resolved this question affirmatively using an explicit parabola construction:
 $$P(m) = (2^m, 4^m)$$
 Graham proved that the pairwise distances between these points lie strictly between $a + 1/10$ and $a + 9/10$ for suitable integers $a$, establishing that $N(X, 1/10) \to \infty$ as $X \to \infty$.
 
 ## Formalization Details
 
-- **Bridge File:** `JSP_000377.lean`
-- **Main Module:** `Erdos466.lean`
+- **Contract Specification:** `Challenge.lean` defines `JSP000377.jsp000377Statement`.
+- **Implementation & Proof:** `Submission.lean` bridges to the Graham parabola formalization in `Erdos466.lean`.
 - **Main Theorem:**
   ```lean
-  theorem jsp_000377_solved :
-      ∃ δ : ℝ, 0 < δ ∧ Filter.Tendsto (fun X : ℝ ↦ Erdos466.N X δ) Filter.atTop Filter.atTop :=
+  theorem jsp_000377_solved : jsp000377Statement :=
     Erdos466.erdos_466
   ```
 - **Axiom Audit:**
-  `#print axioms jsp_000377_solved` depends strictly on standard Lean foundational axioms:
+  `#print axioms jsp_000377_solved` depends strictly on standard foundational Lean axioms:
   ```lean
-  [propext, Classical.choice, Quot.sound]
+  [Classical.choice, Quot.sound, propext]
   ```
-  **Zero** unproved hypotheses, zero `sorry`, zero `admit`.
+  **Zero** unproved hypotheses, zero `sorry`, zero `admit`, zero custom axioms.
 
-## Build & Verification Instructions
+## Verification & Reproducibility
 
 ### Toolchain
-- **Lean:** `leanprover/lean4:v4.33.0`
-- **Mathlib:** `v4.33.0`
+- **Lean:** `leanprover/lean4:v4.34.0`
+- **Mathlib:** `v4.34.0` (commit `5ed2965256430c3649e86755f9576b54eca72435`)
 
-### Build
+### Automated Verification
+Run the self-contained verification script:
 ```bash
-lake exe cache get
-lake build
+python3 check.py
 ```
+This script validates:
+1. Complete compilation via `lake build`.
+2. Clean source check (0 `sorry`, 0 `admit`, 0 `axiom`).
+3. Definitional equality bridge contract check against `Challenge.lean`.
+4. Strict foundational axiom whitelist conformance.
 
 ## Attribution & Provenance
-- **Mathematical Solution:** Ronald Graham.
-- **Formal Authors:** OpenAI Codex and GPT-5.6 Sol, with original proof in `plby/lean-proofs`.
-- **Packaging & Verification:** Maintained and verified by 赵钦 (Qin Zhao, GitHub: [@Drag0ndddd1118](https://github.com/Drag0ndddd1118)).
+- **Mathematical Solution:** Ronald Graham (1976).
+- **Formal Proof Authors:** OpenAI Codex and GPT-5.6 Sol, with original proof in `plby/lean-proofs`.
+- **Packaging, DefEq Bridge Contract & Verification:** Maintained and audited by 赵钦 (Qin Zhao, GitHub: [@Drag0ndddd1118](https://github.com/Drag0ndddd1118)).
